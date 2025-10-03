@@ -51,7 +51,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ media, onClose }) => {
         className="bg-gray-900 rounded-lg overflow-hidden shadow-xl w-11/12 md:w-3/4 lg:w-2/3 max-w-4xl max-h-[90vh] relative animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
       >
-        <button onClick={onClose} className="absolute top-4 right-4 text-white z-20 bg-black/50 rounded-full p-2 hover:bg-black/80 transition-colors">
+        <button onClick={onClose} className="absolute top-4 left-4 text-white z-20 bg-black/50 rounded-full p-2 hover:bg-black/80 transition-colors">
           <CloseIcon />
         </button>
 
@@ -94,7 +94,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ media, onClose }) => {
                 rel="noopener noreferrer"
                 className="w-full md:w-auto flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 text-lg"
               >
-                <PlayIcon className="w-6 h-6 mr-2" />
+                <PlayIcon className="w-6 h-6 ml-2" />
                 צפה עכשיו
               </a>
             </div>

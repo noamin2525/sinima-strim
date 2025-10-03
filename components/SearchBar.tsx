@@ -20,7 +20,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
 
   return (
     <div className="relative w-full max-w-xl">
-      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
         <SearchIcon className="text-gray-400" />
       </div>
       <input
@@ -28,7 +28,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
         placeholder="חפשו סרטים או סדרות..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        className="w-full bg-gray-800 text-white placeholder-gray-400 border border-transparent focus:border-purple-500 focus:ring-0 rounded-full py-2 pl-10 pr-4 transition-colors"
+        className="w-full bg-gray-800 text-white placeholder-gray-400 border border-transparent focus:border-purple-500 focus:ring-0 rounded-full py-2 pr-10 pl-4 transition-colors"
       />
     </div>
   );
