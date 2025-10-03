@@ -19,10 +19,7 @@ const NavItem: React.FC<{ icon: React.ReactNode, label: string, isActive: boolea
 const Sidebar: React.FC<SidebarProps> = ({ currentView, setCurrentView }) => {
     return (
         <nav className="w-64 bg-gray-900/70 backdrop-blur-lg p-4 flex-shrink-0 border-l border-gray-800 h-screen sticky top-0">
-            <div className="text-white text-2xl font-black mb-10 px-4 py-2">
-                CineStream
-            </div>
-            <div className="space-y-2">
+            <div className="space-y-2 mt-10">
                 <NavItem icon={<HomeIcon />} label="בית" isActive={currentView === 'home'} onClick={() => setCurrentView('home')} />
                 <NavItem icon={<MovieIcon />} label="סרטים" isActive={currentView === 'movies'} onClick={() => setCurrentView('movies')} />
                 <NavItem icon={<TvIcon />} label="סדרות" isActive={currentView === 'tv'} onClick={() => setCurrentView('tv')} />

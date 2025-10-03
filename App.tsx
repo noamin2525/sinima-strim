@@ -226,7 +226,10 @@ const App: React.FC = () => {
         <div className="flex min-h-screen bg-gray-900">
             <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
             <main className="flex-1">
-                <header className="sticky top-0 z-20 p-4 bg-gray-900/80 backdrop-blur-sm flex justify-center">
+                <header className="sticky top-0 z-20 p-4 bg-gray-900/80 backdrop-blur-sm flex justify-between items-center gap-8">
+                    <h1 className="text-white text-2xl font-black flex-shrink-0">
+                        CineStream
+                    </h1>
                     <SearchBar onSearch={handleSearch} />
                 </header>
 
