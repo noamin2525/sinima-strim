@@ -1,7 +1,7 @@
 import React from 'react';
-import { Media } from '../types';
-import PosterCard from './PosterCard';
-import Spinner from './Spinner';
+import { Media } from '../types.ts';
+import PosterCard from './PosterCard.tsx';
+import Spinner from './Spinner.tsx';
 
 interface ContentRowProps {
   title: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { HomeIcon, MovieIcon, TvIcon, AddonIcon } from './icons';
+import { HomeIcon, MovieIcon, TvIcon, AddonIcon } from './icons.tsx';
 
 interface SidebarProps {
     currentView: string;

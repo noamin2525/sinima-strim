@@ -1,7 +1,7 @@
 import React from 'react';
-import { Media } from '../types';
-import { IMAGE_BASE_URL } from '../constants';
-import { StarIcon } from './icons';
+import { Media } from '../types.ts';
+import { IMAGE_BASE_URL } from '../constants.ts';
+import { StarIcon } from './icons.tsx';
 
 interface PosterCardProps {
   media: Media;
@@ -12,8 +12,9 @@ const PosterCard: React.FC<PosterCardProps> = ({ media }) => {
     ? `${IMAGE_BASE_URL}w500${media.poster_path}`
     : 'https://picsum.photos/500/750';
 
-  // Construct the Stremio deep link
-  const stremioLink = `https://web.stremio.com/#/detail/${media.media_type}/tmdb:${media.id}`;
+  // Fix: Stremio uses 'series' for TV shows, not 'tv'.
+  const stremioMediaType = media.media_type === 'tv' ? 'series' : media.media_type;
+  const stremioLink = `https://web.stremio.com/#/detail/${stremioMediaType}/tmdb:${media.id}`;
 
   return (
     <a 

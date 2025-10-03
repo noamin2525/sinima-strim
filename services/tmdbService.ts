@@ -1,5 +1,5 @@
-import { API_BASE_URL, API_ACCESS_TOKEN } from '../constants';
-import { Media, MediaDetails, MediaType, Genre } from '../types';
+import { API_BASE_URL, API_ACCESS_TOKEN } from '../constants.ts';
+import { Media, MediaDetails, MediaType, Genre } from '../types.ts';
 
 interface FetchOptions {
   method: string;

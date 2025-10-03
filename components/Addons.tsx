@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddonIcon } from './icons';
+import { AddonIcon } from './icons.tsx';
 
 const addons = [
     {

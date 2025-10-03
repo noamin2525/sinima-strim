@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Media, MediaDetails } from '../types';
-import { IMAGE_BASE_URL } from '../constants';
-import { CloseIcon, PlayIcon, StarIcon } from './icons';
-import { getMediaDetails } from '../services/tmdbService';
-import Spinner from './Spinner';
+import { Media, MediaDetails } from '../types.ts';
+import { IMAGE_BASE_URL } from '../constants.ts';
+import { CloseIcon, PlayIcon, StarIcon } from './icons.tsx';
+import { getMediaDetails } from '../services/tmdbService.ts';
+import Spinner from './Spinner.tsx';
 
 interface DetailModalProps {
   media: Media;
@@ -34,7 +34,10 @@ const DetailModal: React.FC<DetailModalProps> = ({ media, onClose }) => {
   const backdropUrl = details?.backdrop_path ? `${IMAGE_BASE_URL}original${details.backdrop_path}` : (media.backdrop_path ? `${IMAGE_BASE_URL}original${media.backdrop_path}` : '');
   const title = details?.title || media.title || details?.name || media.name;
   const releaseYear = (details?.release_date || media.release_date || details?.first_air_date || media.first_air_date)?.substring(0, 4);
-  const stremioLink = `https://web.stremio.com/#/detail/${media.media_type}/tmdb:${media.id}`;
+  
+  // Fix: Stremio uses 'series' for TV shows, not 'tv'.
+  const stremioMediaType = media.media_type === 'tv' ? 'series' : media.media_type;
+  const stremioLink = `https://web.stremio.com/#/detail/${stremioMediaType}/tmdb:${media.id}`;
 
   const getRuntime = () => {
     if(!details) return '';

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Media, MediaType, Genre } from './types';
-import * as tmdbService from './services/tmdbService';
-import Sidebar from './components/Sidebar';
-import HeroSection from './components/HeroSection';
-import ContentRow from './components/ContentRow';
-import DetailModal from './components/DetailModal';
-import SearchBar from './components/SearchBar';
-import PosterCard from './components/PosterCard';
-import Spinner from './components/Spinner';
-import Addons from './components/Addons';
-import GenreFilter from './components/GenreFilter';
+import { Media, MediaType, Genre } from './types.ts';
+import * as tmdbService from './services/tmdbService.ts';
+import Sidebar from './components/Sidebar.tsx';
+import HeroSection from './components/HeroSection.tsx';
+import ContentRow from './components/ContentRow.tsx';
+import DetailModal from './components/DetailModal.tsx';
+import SearchBar from './components/SearchBar.tsx';
+import PosterCard from './components/PosterCard.tsx';
+import Spinner from './components/Spinner.tsx';
+import Addons from './components/Addons.tsx';
+import GenreFilter from './components/GenreFilter.tsx';
 
 interface MediaState {
     trending: Media[];

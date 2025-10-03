@@ -1,7 +1,7 @@
 import React from 'react';
-import { Media } from '../types';
-import { IMAGE_BASE_URL } from '../constants';
-import { PlayIcon, StarIcon } from './icons';
+import { Media } from '../types.ts';
+import { IMAGE_BASE_URL } from '../constants.ts';
+import { PlayIcon, StarIcon } from './icons.tsx';
 
 interface HeroSectionProps {
   media: Media | null;
@@ -14,7 +14,10 @@ const HeroSection: React.FC<HeroSectionProps> = ({ media, onSelect }) => {
   }
 
   const backdropUrl = media.backdrop_path ? `${IMAGE_BASE_URL}original${media.backdrop_path}` : '';
-  const stremioLink = `https://web.stremio.com/#/detail/${media.media_type}/tmdb:${media.id}`;
+  
+  // Fix: Stremio uses 'series' for TV shows, not 'tv'.
+  const stremioMediaType = media.media_type === 'tv' ? 'series' : media.media_type;
+  const stremioLink = `https://web.stremio.com/#/detail/${stremioMediaType}/tmdb:${media.id}`;
 
   return (
     <div 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { SearchIcon } from './icons';
+import { SearchIcon } from './icons.tsx';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
