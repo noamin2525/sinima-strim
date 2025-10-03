@@ -1,0 +1,5 @@
+{
+  "name": "CineStream",
+  "description": "A modern Stremio-like web application to discover and browse movies and TV series, using data from The Movie Database (TMDB).",
+  "requestFramePermissions": []
+}
