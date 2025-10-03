@@ -11,12 +11,19 @@ import Spinner from './components/Spinner.tsx';
 import Addons from './components/Addons.tsx';
 import GenreFilter from './components/GenreFilter.tsx';
 
+interface PaginatedMedia {
+    results: Media[];
+    page: number;
+    totalPages: number;
+    loadingMore: boolean;
+}
+
 interface MediaState {
     trending: Media[];
-    popularMovies: Media[];
-    popularTV: Media[];
-    topRatedMovies: Media[];
-    topRatedTV: Media[];
+    popularMovies: PaginatedMedia;
+    popularTV: PaginatedMedia;
+    topRatedMovies: PaginatedMedia;
+    topRatedTV: PaginatedMedia;
 }
 
 interface GenreState {
@@ -29,13 +36,20 @@ interface SelectedGenreState {
     tv: Genre | null;
 }
 
+const initialPaginatedMedia: PaginatedMedia = {
+    results: [],
+    page: 0,
+    totalPages: 1,
+    loadingMore: false,
+};
+
 const App: React.FC = () => {
     const [media, setMedia] = useState<MediaState>({
         trending: [],
-        popularMovies: [],
-        popularTV: [],
-        topRatedMovies: [],
-        topRatedTV: [],
+        popularMovies: { ...initialPaginatedMedia },
+        popularTV: { ...initialPaginatedMedia },
+        topRatedMovies: { ...initialPaginatedMedia },
+        topRatedTV: { ...initialPaginatedMedia },
     });
     const [genres, setGenres] = useState<GenreState>({ movieGenres: [], tvGenres: [] });
     const [selectedGenre, setSelectedGenre] = useState<SelectedGenreState>({ movie: null, tv: null });
@@ -49,23 +63,69 @@ const App: React.FC = () => {
     const [searchLoading, setSearchLoading] = useState(false);
     const [currentView, setCurrentView] = useState('home');
 
+    type MediaCategory = 'popularMovies' | 'popularTV' | 'topRatedMovies' | 'topRatedTV';
+
+    const loadMore = useCallback(async (category: MediaCategory) => {
+        const categoryState = media[category];
+        if (categoryState.loadingMore || categoryState.page >= categoryState.totalPages) {
+            return;
+        }
+
+        setMedia(prev => ({
+            ...prev,
+            [category]: { ...prev[category], loadingMore: true }
+        }));
+
+        try {
+            const mediaType = category.includes('Movies') ? MediaType.Movie : MediaType.TV;
+            const fetchFunction = category.includes('popular') ? tmdbService.getPopular : tmdbService.getTopRated;
+            
+            const genreId = mediaType === MediaType.Movie ? selectedGenre.movie?.id : selectedGenre.tv?.id;
+            const nextPage = categoryState.page + 1;
+            const data = await fetchFunction(mediaType, nextPage, genreId);
+
+            setMedia(prev => ({
+                ...prev,
+                [category]: {
+                    results: [...prev[category].results, ...data.results],
+                    page: data.page,
+                    totalPages: data.total_pages,
+                    loadingMore: false
+                }
+            }));
+        } catch (error) {
+            console.error(`Failed to load more for ${category}`, error);
+            setMedia(prev => ({
+                ...prev,
+                [category]: { ...prev[category], loadingMore: false }
+            }));
+        }
+    }, [media, selectedGenre.movie, selectedGenre.tv]);
+
+
     useEffect(() => {
         const fetchInitialData = async () => {
             try {
                 setLoading(true);
                 const [
-                    trending, popularMovies, popularTV, 
-                    topRatedMovies, topRatedTV, movieGenresData, tvGenresData
+                    trending, popularMoviesRes, popularTVRes, 
+                    topRatedMoviesRes, topRatedTVRes, movieGenresData, tvGenresData
                 ] = await Promise.all([
                     tmdbService.getTrending(),
-                    tmdbService.getPopular(MediaType.Movie),
-                    tmdbService.getPopular(MediaType.TV),
-                    tmdbService.getTopRated(MediaType.Movie),
-                    tmdbService.getTopRated(MediaType.TV),
+                    tmdbService.getPopular(MediaType.Movie, 1),
+                    tmdbService.getPopular(MediaType.TV, 1),
+                    tmdbService.getTopRated(MediaType.Movie, 1),
+                    tmdbService.getTopRated(MediaType.TV, 1),
                     tmdbService.getGenres(MediaType.Movie),
                     tmdbService.getGenres(MediaType.TV)
                 ]);
-                setMedia({ trending, popularMovies, popularTV, topRatedMovies, topRatedTV });
+                setMedia({
+                    trending,
+                    popularMovies: { results: popularMoviesRes.results, page: popularMoviesRes.page, totalPages: popularMoviesRes.total_pages, loadingMore: false },
+                    popularTV: { results: popularTVRes.results, page: popularTVRes.page, totalPages: popularTVRes.total_pages, loadingMore: false },
+                    topRatedMovies: { results: topRatedMoviesRes.results, page: topRatedMoviesRes.page, totalPages: topRatedMoviesRes.total_pages, loadingMore: false },
+                    topRatedTV: { results: topRatedTVRes.results, page: topRatedTVRes.page, totalPages: topRatedTVRes.total_pages, loadingMore: false },
+                });
                 setGenres({ movieGenres: movieGenresData.genres, tvGenres: tvGenresData.genres });
             } catch (error) {
                 console.error("Failed to fetch initial data", error);
@@ -83,11 +143,15 @@ const App: React.FC = () => {
             setViewLoading(true);
             try {
                 const genreId = selectedGenre.movie?.id;
-                const [popularMovies, topRatedMovies] = await Promise.all([
-                    tmdbService.getPopular(MediaType.Movie, genreId),
-                    tmdbService.getTopRated(MediaType.Movie, genreId),
+                const [popularMoviesRes, topRatedMoviesRes] = await Promise.all([
+                    tmdbService.getPopular(MediaType.Movie, 1, genreId),
+                    tmdbService.getTopRated(MediaType.Movie, 1, genreId),
                 ]);
-                setMedia(prev => ({ ...prev, popularMovies, topRatedMovies }));
+                setMedia(prev => ({ 
+                    ...prev, 
+                    popularMovies: { results: popularMoviesRes.results, page: 1, totalPages: popularMoviesRes.total_pages, loadingMore: false },
+                    topRatedMovies: { results: topRatedMoviesRes.results, page: 1, totalPages: topRatedMoviesRes.total_pages, loadingMore: false }
+                }));
             } catch (error) {
                 console.error("Failed to fetch movies by genre", error);
             } finally {
@@ -104,11 +168,15 @@ const App: React.FC = () => {
             setViewLoading(true);
             try {
                 const genreId = selectedGenre.tv?.id;
-                const [popularTV, topRatedTV] = await Promise.all([
-                    tmdbService.getPopular(MediaType.TV, genreId),
-                    tmdbService.getTopRated(MediaType.TV, genreId),
+                const [popularTVRes, topRatedTVRes] = await Promise.all([
+                    tmdbService.getPopular(MediaType.TV, 1, genreId),
+                    tmdbService.getTopRated(MediaType.TV, 1, genreId),
                 ]);
-                setMedia(prev => ({ ...prev, popularTV, topRatedTV }));
+                setMedia(prev => ({ 
+                    ...prev, 
+                    popularTV: { results: popularTVRes.results, page: 1, totalPages: popularTVRes.total_pages, loadingMore: false },
+                    topRatedTV: { results: topRatedTVRes.results, page: 1, totalPages: topRatedTVRes.total_pages, loadingMore: false }
+                }));
             } catch (error) {
                 console.error("Failed to fetch tv shows by genre", error);
             } finally {
@@ -186,8 +254,8 @@ const App: React.FC = () => {
                                 onSelectGenre={handleSelectMovieGenre} 
                             />
                         </div>
-                        <ContentRow title="סרטים פופולריים" media={media.popularMovies} loading={viewLoading} />
-                        <ContentRow title="סרטים עם דירוג גבוה" media={media.topRatedMovies} loading={viewLoading} />
+                        <ContentRow title="סרטים פופולריים" media={media.popularMovies.results} loading={viewLoading} hasMore={media.popularMovies.page < media.popularMovies.totalPages} loadingMore={media.popularMovies.loadingMore} onLoadMore={() => loadMore('popularMovies')} />
+                        <ContentRow title="סרטים עם דירוג גבוה" media={media.topRatedMovies.results} loading={viewLoading} hasMore={media.topRatedMovies.page < media.topRatedMovies.totalPages} loadingMore={media.topRatedMovies.loadingMore} onLoadMore={() => loadMore('topRatedMovies')} />
                     </div>
                 );
             case 'tv':
@@ -201,8 +269,8 @@ const App: React.FC = () => {
                                 onSelectGenre={handleSelectTvGenre} 
                             />
                         </div>
-                        <ContentRow title="סדרות פופולריות" media={media.popularTV} loading={viewLoading} />
-                        <ContentRow title="סדרות עם דירוג גבוה" media={media.topRatedTV} loading={viewLoading} />
+                        <ContentRow title="סדרות פופולריות" media={media.popularTV.results} loading={viewLoading} hasMore={media.popularTV.page < media.popularTV.totalPages} loadingMore={media.popularTV.loadingMore} onLoadMore={() => loadMore('popularTV')} />
+                        <ContentRow title="סדרות עם דירוג גבוה" media={media.topRatedTV.results} loading={viewLoading} hasMore={media.topRatedTV.page < media.topRatedTV.totalPages} loadingMore={media.topRatedTV.loadingMore} onLoadMore={() => loadMore('topRatedTV')} />
                     </div>
                 );
             case 'addons':
@@ -213,10 +281,10 @@ const App: React.FC = () => {
                     <>
                         <HeroSection media={heroMedia} onSelect={handleSelectMedia}/>
                         <ContentRow title="הפופולריים השבוע" media={media.trending} loading={loading} />
-                        <ContentRow title="סרטים פופולריים" media={media.popularMovies} loading={loading} />
-                        <ContentRow title="סדרות פופולריות" media={media.popularTV} loading={loading} />
-                        <ContentRow title="סרטים עם דירוג גבוה" media={media.topRatedMovies} loading={loading} />
-                        <ContentRow title="סדרות עם דירוג גבוה" media={media.topRatedTV} loading={loading} />
+                        <ContentRow title="סרטים פופולריים" media={media.popularMovies.results} loading={loading} hasMore={media.popularMovies.page < media.popularMovies.totalPages} loadingMore={media.popularMovies.loadingMore} onLoadMore={() => loadMore('popularMovies')} />
+                        <ContentRow title="סדרות פופולריות" media={media.popularTV.results} loading={loading} hasMore={media.popularTV.page < media.popularTV.totalPages} loadingMore={media.popularTV.loadingMore} onLoadMore={() => loadMore('popularTV')} />
+                        <ContentRow title="סרטים עם דירוג גבוה" media={media.topRatedMovies.results} loading={loading} hasMore={media.topRatedMovies.page < media.topRatedMovies.totalPages} loadingMore={media.topRatedMovies.loadingMore} onLoadMore={() => loadMore('topRatedMovies')} />
+                        <ContentRow title="סדרות עם דירוג גבוה" media={media.topRatedTV.results} loading={loading} hasMore={media.topRatedTV.page < media.topRatedTV.totalPages} loadingMore={media.topRatedTV.loadingMore} onLoadMore={() => loadMore('topRatedTV')} />
                     </>
                 );
         }

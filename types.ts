@@ -32,3 +32,10 @@ export interface MediaDetails extends Media {
   episode_run_time?: number[];
   tagline: string;
 }
+
+export interface PaginatedResponse<T> {
+  results: T[];
+  page: number;
+  total_pages: number;
+  total_results: number;
+}
