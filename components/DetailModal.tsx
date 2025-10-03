@@ -71,8 +71,8 @@ const DetailModal: React.FC<DetailModalProps> = ({ media, onClose }) => {
               <div className="flex flex-col md:flex-row gap-4 md:gap-8 mb-6">
                 <div className="flex items-center space-x-4 text-gray-300">
                     <div className="flex items-center text-lg">
-                        <StarIcon className="w-5 h-5 text-yellow-400 mr-2" />
-                        <span className="font-bold text-white">{details?.vote_average.toFixed(1)}</span>
+                        <StarIcon className="w-5 h-5 text-yellow-400" />
+                        <span className="font-bold text-white mr-2">{details?.vote_average.toFixed(1)}</span>
                     </div>
                     <span>{releaseYear}</span>
                     <span>{getRuntime()}</span>
@@ -95,7 +95,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ media, onClose }) => {
                 className="w-full md:w-auto flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300 text-lg"
               >
                 <PlayIcon className="w-6 h-6 mr-2" />
-                Watch Now
+                צפה עכשיו
               </a>
             </div>
           </div>

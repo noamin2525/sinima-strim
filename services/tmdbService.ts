@@ -18,8 +18,11 @@ const options: FetchOptions = {
 };
 
 const fetchData = async <T,>(endpoint: string): Promise<T> => {
+  const separator = endpoint.includes('?') ? '&' : '?';
+  const url = `${API_BASE_URL}/${endpoint}${separator}language=he-IL`;
+
   try {
-    const response = await fetch(`${API_BASE_URL}/${endpoint}`, options);
+    const response = await fetch(url, options);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -39,7 +42,8 @@ interface PaginatedResponse<T> {
 
 export const getTrending = async (mediaType: MediaType = MediaType.All, timeWindow: 'day' | 'week' = 'week'): Promise<Media[]> => {
   const data = await fetchData<PaginatedResponse<Media>>(`trending/${mediaType}/${timeWindow}`);
-  return data.results;
+  // Filter out people from trending results, as they don't fit the Media interface well and can cause errors.
+  return data.results.filter(item => item.media_type === 'movie' || item.media_type === 'tv');
 };
 
 export const getPopular = async (mediaType: MediaType.Movie | MediaType.TV): Promise<Media[]> => {

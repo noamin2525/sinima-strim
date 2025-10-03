@@ -86,7 +86,7 @@ const App: React.FC = () => {
             return (
                 <div className="p-4 md:p-8">
                     <h2 className="text-2xl font-bold mb-4 text-gray-200">
-                        Search Results for "{searchQuery}"
+                        תוצאות חיפוש עבור "{searchQuery}"
                     </h2>
                     {searchLoading ? <div className="h-64"><Spinner/></div> :
                      searchResults.length > 0 ? (
@@ -96,7 +96,7 @@ const App: React.FC = () => {
                             ))}
                         </div>
                     ) : (
-                        <p>No results found.</p>
+                        <p>לא נמצאו תוצאות.</p>
                     )}
                 </div>
             );
@@ -106,17 +106,17 @@ const App: React.FC = () => {
             case 'movies':
                 return (
                     <div className="p-4 md:p-8">
-                        <h1 className="text-4xl font-black mb-4 text-white">Movies</h1>
-                        <ContentRow title="Popular Movies" media={media.popularMovies} loading={loading} />
-                        <ContentRow title="Top Rated Movies" media={media.topRatedMovies} loading={loading} />
+                        <h1 className="text-4xl font-black mb-4 text-white">סרטים</h1>
+                        <ContentRow title="סרטים פופולריים" media={media.popularMovies} loading={loading} />
+                        <ContentRow title="סרטים עם דירוג גבוה" media={media.topRatedMovies} loading={loading} />
                     </div>
                 );
             case 'tv':
                  return (
                     <div className="p-4 md:p-8">
-                        <h1 className="text-4xl font-black mb-4 text-white">TV Shows</h1>
-                        <ContentRow title="Popular TV Shows" media={media.popularTV} loading={loading} />
-                        <ContentRow title="Top Rated TV Shows" media={media.topRatedTV} loading={loading} />
+                        <h1 className="text-4xl font-black mb-4 text-white">סדרות</h1>
+                        <ContentRow title="סדרות פופולריות" media={media.popularTV} loading={loading} />
+                        <ContentRow title="סדרות עם דירוג גבוה" media={media.topRatedTV} loading={loading} />
                     </div>
                 );
             case 'addons':
@@ -126,11 +126,11 @@ const App: React.FC = () => {
                 return (
                     <>
                         <HeroSection media={heroMedia} onSelect={handleSelectMedia}/>
-                        <ContentRow title="Trending This Week" media={media.trending} loading={loading} />
-                        <ContentRow title="Popular Movies" media={media.popularMovies} loading={loading} />
-                        <ContentRow title="Popular TV Shows" media={media.popularTV} loading={loading} />
-                        <ContentRow title="Top Rated Movies" media={media.topRatedMovies} loading={loading} />
-                        <ContentRow title="Top Rated TV Shows" media={media.topRatedTV} loading={loading} />
+                        <ContentRow title="הפופולריים השבוע" media={media.trending} loading={loading} />
+                        <ContentRow title="סרטים פופולריים" media={media.popularMovies} loading={loading} />
+                        <ContentRow title="סדרות פופולריות" media={media.popularTV} loading={loading} />
+                        <ContentRow title="סרטים עם דירוג גבוה" media={media.topRatedMovies} loading={loading} />
+                        <ContentRow title="סדרות עם דירוג גבוה" media={media.topRatedTV} loading={loading} />
                     </>
                 );
         }
@@ -140,7 +140,7 @@ const App: React.FC = () => {
         <div className="flex min-h-screen bg-gray-900">
             <Sidebar currentView={currentView} setCurrentView={setCurrentView} />
             <main className="flex-1">
-                <header className="sticky top-0 z-20 p-4 bg-gray-900/80 backdrop-blur-sm flex justify-end">
+                <header className="sticky top-0 z-20 p-4 bg-gray-900/80 backdrop-blur-sm flex justify-center">
                     <SearchBar onSearch={handleSearch} />
                 </header>
 

@@ -29,7 +29,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ media, onSelect }) => {
         <div className="flex items-center space-x-4 mb-4">
             <div className="flex items-center">
                 <StarIcon className="w-5 h-5 text-yellow-400" />
-                <span className="ml-2 font-semibold">{media.vote_average.toFixed(1)}</span>
+                <span className="mr-2 font-semibold">{media.vote_average.toFixed(1)}</span>
             </div>
             <span className="text-gray-300">{(media.release_date || media.first_air_date)?.substring(0, 4)}</span>
         </div>
@@ -41,13 +41,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ media, onSelect }) => {
             rel="noopener noreferrer"
             className="flex items-center justify-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300">
             <PlayIcon className="w-6 h-6 mr-2" />
-            Watch Now
+            צפה עכשיו
           </a>
           <button 
             onClick={() => onSelect(media)}
             className="flex items-center justify-center bg-gray-700/50 hover:bg-gray-600/70 backdrop-blur-sm text-white font-bold py-3 px-6 rounded-lg transition-colors duration-300"
           >
-            More Info
+            מידע נוסף
           </button>
         </div>
       </div>

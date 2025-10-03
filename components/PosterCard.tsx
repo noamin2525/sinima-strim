@@ -28,7 +28,7 @@ const PosterCard: React.FC<PosterCardProps> = ({ media }) => {
         <h3 className="font-bold text-lg text-white drop-shadow-md">{media.title || media.name}</h3>
         <div className="flex items-center mt-1">
           <StarIcon className="w-4 h-4 text-yellow-400" />
-          <span className="text-white text-sm ml-1">{media.vote_average.toFixed(1)}</span>
+          <span className="text-white text-sm mr-1">{media.vote_average.toFixed(1)}</span>
         </div>
       </div>
     </a>

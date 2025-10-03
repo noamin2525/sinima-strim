@@ -4,27 +4,27 @@ import { AddonIcon } from './icons';
 const addons = [
     {
         name: 'Torrentio + RealDebrid',
-        description: 'The most popular addon for streaming from torrents with RealDebrid.',
+        description: 'התוסף הפופולרי ביותר לסטרימינג מטורנטים עם RealDebrid.',
         url: 'stremio://torrentio.strem.fun/easydebrid=n3cgfuzhg9ptzbss/manifest.json'
     },
     {
         name: 'Wizdom Subtitles',
-        description: 'Get subtitles in multiple languages.',
+        description: 'קבל כתוביות במגוון שפות.',
         url: 'stremio://4b139a4b7f94-wizdom-stremio-v2.baby-beamup.club/manifest.json'
     },
     {
         name: 'Ktuvit Subtitles',
-        description: 'Hebrew subtitles from Ktuvit.',
+        description: 'כתוביות בעברית מאתר כתובית.',
         url: 'stremio://4b139a4b7f94-ktuvit-stremio.baby-beamup.club/manifest.json'
     },
     {
         name: 'Movie Release Dates',
-        description: 'Get notified when new high-quality movie releases are available.',
+        description: 'קבל עדכונים כאשר סרטים חדשים באיכות גבוהה זמינים ברשת.',
         url: 'stremio://stremio7rd-movies-online-dates.vercel.app/manifest.json'
     },
     {
         name: 'Hebrew Posters & Info (TMDB)',
-        description: 'Adds Hebrew posters and enables searching for content in Hebrew.',
+        description: 'מוסיף פוסטרים בעברית ומאפשר חיפוש תכנים בעברית.',
         url: 'stremio://94c8cb9f702d-tmdb-addon.baby-beamup.club/N4IgNghgdg5grhGBTEAuEALJBaAkgGRABoQBnAFwCckIBbAS1jQG0BdEgYwnIjAHsYpFqHoATNCHK1RAIwB05PgAdikgJ5KU6WnwBu9FCSh0tIAArK4kSqtIY+Ad1xQAEn1paqcJAF8iI8XQpWQVlVXINU1IkSgMhIxMJCyUrCBsSO0dnNw80L19-EDEJYPk1GnT1TQkdfUMQY1z0AE0K23snV3dPSm8-AJLpMraSCOr0aNikeIbElpGyDuzuvN6CgaChuUhYBGRwyJq9A1VG03xoeER6zM6cnr7C4s2Qnav90cOJmLjTuZALrtru0sl0mvl+kVApItlQkFBRIwYAdxiBaicEk0QAAVagIpEgu4rVAQp7Q0oKPGIpifVGTX6Y0y4+HU5EZJZgh6+dggLgUADCfDgUHIaAArD4gA/manifest.json'
     }
 ];
@@ -32,7 +32,7 @@ const addons = [
 const Addons: React.FC = () => {
     return (
         <div className="p-4 md:p-8">
-            <h1 className="text-4xl font-black mb-8 text-white">Install Addons</h1>
+            <h1 className="text-4xl font-black mb-8 text-white">התקנת תוספים</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {addons.map((addon) => (
                     <div key={addon.name} className="bg-gray-800/50 p-6 rounded-lg border border-gray-700 flex flex-col justify-between transform transition-all duration-300 hover:scale-105 hover:border-purple-500">
@@ -47,7 +47,7 @@ const Addons: React.FC = () => {
                             href={addon.url}
                             className="mt-auto block text-center bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-colors duration-300"
                         >
-                            Install
+                            התקן
                         </a>
                     </div>
                 ))}
