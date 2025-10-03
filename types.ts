@@ -6,6 +6,11 @@ export enum MediaType {
   All = 'all',
 }
 
+export interface Genre {
+  id: number;
+  name: string;
+}
+
 export interface Media {
   id: number;
   title?: string;

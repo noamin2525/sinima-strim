@@ -1,5 +1,5 @@
 import { API_BASE_URL, API_ACCESS_TOKEN } from '../constants';
-import { Media, MediaDetails, MediaType } from '../types';
+import { Media, MediaDetails, MediaType, Genre } from '../types';
 
 interface FetchOptions {
   method: string;
@@ -46,14 +46,27 @@ export const getTrending = async (mediaType: MediaType = MediaType.All, timeWind
   return data.results.filter(item => item.media_type === 'movie' || item.media_type === 'tv');
 };
 
-export const getPopular = async (mediaType: MediaType.Movie | MediaType.TV): Promise<Media[]> => {
-    const data = await fetchData<PaginatedResponse<Media>>(`${mediaType}/popular`);
+export const getGenres = async (mediaType: MediaType.Movie | MediaType.TV): Promise<{ genres: Genre[] }> => {
+    return await fetchData<{ genres: Genre[] }>(`genre/${mediaType}/list`);
+}
+
+export const getPopular = async (mediaType: MediaType.Movie | MediaType.TV, genreId?: number): Promise<Media[]> => {
+    let endpoint = `${mediaType}/popular`;
+    if (genreId) {
+        endpoint = `discover/${mediaType}?with_genres=${genreId}&sort_by=popularity.desc`;
+    }
+    const data = await fetchData<PaginatedResponse<Media>>(endpoint);
     // Manually add media_type since the API doesn't return it on this endpoint
     return data.results.map(item => ({ ...item, media_type: mediaType }));
 }
 
-export const getTopRated = async (mediaType: MediaType.Movie | MediaType.TV): Promise<Media[]> => {
-    const data = await fetchData<PaginatedResponse<Media>>(`${mediaType}/top_rated`);
+export const getTopRated = async (mediaType: MediaType.Movie | MediaType.TV, genreId?: number): Promise<Media[]> => {
+    let endpoint = `${mediaType}/top_rated`;
+    if (genreId) {
+        // The discover endpoint doesn't have a direct "top rated" sort, but vote_average.desc with a minimum vote count is the standard way to replicate it.
+        endpoint = `discover/${mediaType}?with_genres=${genreId}&sort_by=vote_average.desc&vote_count.gte=200`;
+    }
+    const data = await fetchData<PaginatedResponse<Media>>(endpoint);
     // Manually add media_type since the API doesn't return it on this endpoint
     return data.results.map(item => ({ ...item, media_type: mediaType }));
 }
